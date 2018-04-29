@@ -11,7 +11,6 @@
 #******************************************************************************#
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
 SOURCE = ft_atoi.c \
 			ft_bzero.c \
 			ft_isalnum.c \
@@ -85,7 +84,7 @@ RM = rm -f
 all: $(NAME)
 
 $(NAME):
-	$(CC) $(CFLAGS) -c $(SOURCE) -I $(HEADER)
+	$(CC) -c $(SOURCE) -I $(HEADER)
 	ar rc $(NAME) $(OBJECTS)
 
 clean:
