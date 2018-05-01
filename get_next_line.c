@@ -10,27 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
 #include "get_next_line.h"
-#include <stdio.h>
-int	get_next_line(const int fd, char **line)
+
+int				get_next_line(const int fd, char **line)
 {
 	int ret;
 	char buf[BUFF_SIZE];
-	static char *pr;
 
 	if ((fd < 0 || line == NULL || read(fd, buf, 0) < 0))
 		return (-1);
 	while ((ret = read(fd, buf, BUFF_SIZE - 1)))
 	{
-		pr = buf;
-		while (*pr != '\n' && *pr != '\0')
-		{
-			ft_putchar(*pr);
-			pr++;
-		}
+		ft_strjoin()
 	}
-	if (*pr == '\n')
-		return (1);
-	return (0);
+	if (*pr == '\0')
+		return (0);
+	return (1);
 }
