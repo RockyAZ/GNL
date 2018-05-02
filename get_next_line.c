@@ -12,18 +12,22 @@
 
 #include "get_next_line.h"
 
-void	ft_list_push_back(t_list **begin_list, void *data)
+void	ft_list_push_back(t_list **begin_list, int fd)
 {
 	t_list *cursor;
 
 	cursor = *begin_list;
 	if (!cursor)
-		*begin_list = ft_lstnew(data, 0);
+	{
+		*begin_list = ft_lstnew(NULL, 0);
+		cursor->content_size = fd;
+	}
 	else
 	{
 		while (cursor->next != NULL)
 			cursor = cursor->next;
-		cursor->next = ft_lstnew(data, 0);
+		cursor->next = ft_lstnew(NULL, 0);
+		cursor->content_size = fd;
 	}
 }
 
@@ -38,7 +42,7 @@ static t_list	*ft_check_lst(t_list **begin, const int fd)
 			return (cp);
 		cp = cp->next;
 	}
-
+	ft_list_push_back(&cp, fd);
 	return (cp);
 }
 
@@ -58,37 +62,27 @@ static int		ft_check_str(char *str)
 	}
 	return (0);
 }
-/*
-static char *ft_result(t_list **begin)
-{
 
-}
-*/
 int				get_next_line(const int fd, char **line)
 {
 	int				ret;
 	char			buf[BUFF_SIZE];
-	char			*res;
 	static t_list	*begin;
 
 	if ((fd < 0 || line == NULL || read(fd, buf, 0) < 0))
 		return (-1);
-	begin = ft_check_lst(begin, fd);
+	begin = ft_check_lst(&begin, fd);
 	while ((ret = read(fd, buf, BUFF_SIZE)))
 	{
 		if (!ft_check_str(buf))
 		{
-			res = ft_strjoin(begin->content, buf);
+			begin->content = ft_strjoin(begin->content, buf);
 			free(begin->content);
-			begin->content = ft_strdup(res);
-			free(res);
 		}
 		else
 		{
 			
 		}
 	}
-	if (*res == '\0')
-		return (0);
 	return (1);
 }
