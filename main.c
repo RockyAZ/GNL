@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
 #include "get_next_line.h"
 
 int main(int ac, char **av)
@@ -18,10 +17,15 @@ int main(int ac, char **av)
 	int		fd;
 	char	*line;
 
+	if (ac == 1)
+	{
+		ft_putstr("error input_file\n");
+		return (0);
+	}
 	if ((fd = open(av[1], O_RDONLY)) == -1)
 		return (write(1, "error\n", 6));
 	while (get_next_line(fd, &line) == 1)
-	{
+	{//write(1, "a\n", 2);
 		ft_putstr(line);
 	}
 	close(fd);
