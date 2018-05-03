@@ -74,13 +74,12 @@ int				get_next_list(const int fd, char **line)
 		return (-1);
 	res = NULL;
 	if (!ft_check_lst(&begin, fd))
-	{
 		if ((begin->content = reading(fd)) == NULL)
 			return (-1);
-	}
-	start = ft_mover(begin, 1);
+	start = ft_mover(begin->content, 1);
 	end = ft_mover(start, 0);
 	*line = ft_strsub(start, 0, end - start);
 	ft_memset(start, '\n', end - start);
-	return (0);
+	return (1);
+	/*if == \0 return (0);*/
 }
