@@ -1,20 +1,21 @@
 #include "get_next_line.h"
-/*
+
 int main()
 {
 	char *str;
 	char *str1;
-    char *str;
 
-    str = ft_strdup("abcd");
-    str1 = ft_strdup("1234");
-    str = ft_strjoin(str, str1);
-    printf("%s\n", str);
+    str = ft_strdup("123456");
+    str1 = str;
+    str1++;
+    str1++;
+    str1++;
+//    str = ft_strjoin(str, str1);
+    printf("%d\n", str1 - str);
     return (0);
-
 }
-*/
 
+/*
 int main()
 {
 	char **str;
@@ -33,3 +34,4 @@ str[3] = 0;
     return (0);
 
 }
+*/

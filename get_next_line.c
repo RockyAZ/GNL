@@ -12,20 +12,6 @@
 
 #include "get_next_list.h"
 
-static char		*arr_to_str(char **res)
-{
-	int		i;
-	char	*str;
-
-	i = 0;
-	while (res[i])
-	{
-		free (str);
-		str = ft_join(str, res[i]);
-	}
-	return (str);
-}
-
 static int 		ft_check_lst(t_list **begin, const int fd)
 {
 	t_list *first;
@@ -49,21 +35,7 @@ static int 		ft_check_lst(t_list **begin, const int fd)
 	return (0);
 }
 
-static char		*move_arr(char **res, int bul)
-{
-	int i;
-
-	i = 0;
-	while (!res[i])
-		i++;
-	if (res[i + 1])
-		return (res[i]);
-	if (!bul)
-		return (NULL);
-	return (res[i]);
-}
-
-static char		**reading(const int fd)
+static char		*reading(const int fd)
 {
 	int		ret;
 	char	buf[BUFF_SIZE];
@@ -78,14 +50,24 @@ static char		**reading(const int fd)
 		buf[ret] = '\0';
 		cp = ft_strjoin(cp, buf);
 	}
-	return (ft_strsplit(cp, '\n'));
-		free(cp);
+	return (cp);
 }
 
+static char		*ft_mover(char *begin, int bul)
+{
+	if (!bul)
+		while (*begin != '\n')
+			begin++;
+	else
+		while (*begin == '\n')
+			begin++;
+	return (begin);
+}
+/*ft_memset*/
 int				get_next_list(const int fd, char **line)
 {
-	char 			*cp;
-	char			**res;
+	char 			*end;
+	char			*start;
 	static t_list	*begin;
 
 	if (line == NULL)
@@ -93,19 +75,12 @@ int				get_next_list(const int fd, char **line)
 	res = NULL;
 	if (!ft_check_lst(&begin, fd))
 	{
-		if ((res = reading(fd)) == NULL)
+		if ((begin->content = reading(fd)) == NULL)
 			return (-1);
-		begin->content	= arr_to_str(res);
 	}
-	if ((cp = move_arr(res, 0)))
-	{
-		*line = ft_strdup(cp);
-		ft_strdel(&cp);
-		return (1);
-	}
-	cp = strdup(move_arr(res, 1));
-	*line = cp;
-	ft_strdel(&cp);
-	free (res);
+	start = ft_mover(begin, 1);
+	end = ft_mover(start, 0);
+	*line = ft_strsub(start, 0, end - start);
+	ft_memset(start, '\n', end - start);
 	return (0);
 }
