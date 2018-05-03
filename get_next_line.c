@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_list.h"
 
 static int 		ft_check_lst(t_list **begin, const int fd)
 {
@@ -35,61 +35,61 @@ static int 		ft_check_lst(t_list **begin, const int fd)
 	return (0);
 }
 
-static int		ft_del_arr(char **res)
+static char		*move_arr(char **res, int bul)
 {
 	int i;
 
 	i = 0;
 	while (!res[i])
 		i++;
-	free(res[i]);
-	res[i] = NULL;
-}
-
-static char		*move_arr(char **res)
-{
-	int i;
-
-	i = 0;
-	while (!res[i])
-		i++;
+	if (res[i + 1])
+		return (res[i]);
+	if (!bul)
+		return (NULL);
 	return (res[i]);
 }
 
-static int		size_arr(char **res)
+static char		**reading(const int fd)
 {
-	int i;
+	int		ret;
+	char	buf[BUFF_SIZE];
+	char 	*cp;
 
-	i = 0;
-	while (res[i])
-		i++;
-	return (i);
+
+	if ((fd < 0 || read(fd, buf, 0) < 0))
+		return (NULL);
+	while ((ret = read(fd, buf, BUFF_SIZE - 1)))
+	{
+		free(cp);
+		buf[ret] = '\0';
+		cp = ft_strjoin(cp, buf);
+	}
+	return (ft_strsplit(cp, '\n'));
+		free(cp);
+	
 }
 
-int				get_next_line(const int fd, char **line)
+int				get_next_list(const int fd, char **line)
 {
-	int				ret;
-	char			buf[BUFF_SIZE];
 	char 			*cp;
 	char			**res;
 	static t_list	*begin;
 
-	if ((fd < 0 || line == NULL || read(fd, buf, 0) < 0))
+	if (line == NULL)
 		return (-1);
+	res = NULL;
 	if (!ft_check_lst(&begin, fd))
+		if ((res = reading(fd)) == NULL)
+			return (-1);
+	if ((cp = move_arr(res, 0)))
 	{
-		while ((ret = read(fd, buf, BUFF_SIZE - 1)))
-		{
-			free(cp);
-			buf[ret] = '\0';
-			cp = ft_strjoin(cp, buf);
-		}
-		res = ft_strsplit(cp, '\n');
-		free(cp);
-		begin->content = res;
-		ret = size_arr(res);
-		*line = ft_strdup(move_arr(res));
-		ft_del_arr(res);
+		*line = ft_strdup(cp);
+		ft_strdel(&cp);
+		return (1);
 	}
+	cp = strdup(move_arr(res, 1));
+	*line = cp;
+	ft_strdel(&cp);
+	free (res);
 	return (0);
 }
