@@ -12,12 +12,14 @@
 
 #include "get_next_line.h"
 
+//static 
+
 static t_list	*ft_check_lst(t_list **begin, const int fd)
 {
 	t_list *cp;
 	t_list *first;
-
 	cp = *begin;
+	
 	while (cp)
 	{
 		if (cp->content_size == (size_t)fd)
@@ -47,7 +49,7 @@ static int		ft_check_str(char *str)
 	}
 	return (0);
 }
-
+//ft_strchr;
 int				get_next_line(const int fd, char **line)
 {
 	int				i;
@@ -63,9 +65,7 @@ int				get_next_line(const int fd, char **line)
 	{
 		buf[ret] = '\0';
 		if (!(i = ft_check_str(buf)))
-		{
 			begin->content = ft_strjoin(begin->content, buf);
-		}
 		else
 		{
 			cp = ft_strnew(i);

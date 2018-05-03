@@ -26,7 +26,7 @@ int main(int ac, char **av)
 		return (write(1, "error\n", 6));
 	while (get_next_line(fd, &line) == 1)
 	{//write(1, "a\n", 2);
-		ft_putstr(line);
+		ft_putendl(line);
 	}
 	close(fd);
 }

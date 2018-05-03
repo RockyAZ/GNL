@@ -1,7 +1,5 @@
-Pattern rules may have more than one target. Unlike normal rules, this does not act as many
-different rules with the same prerequisites and recipe. If a pattern rule has multiple targets,
-make knows that the rule’s recipe is responsible for making all of the targets.
-The recipe is executed only once to make all the targets.
-When searching for a pattern rule to match a target, the target patterns of a rule other than the
-one that matches the target in need of a rule are incidental: make worries only about giving
-a recipe and prerequisites to the file presently in question.
+Pattern rules may have more than one target.
+Unlike normal rules, this does not act as many
+different rules with the same
+prerequisites and recipe.
+If a pattern rule has multiple targets.
