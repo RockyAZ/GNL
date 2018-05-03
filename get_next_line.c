@@ -12,6 +12,20 @@
 
 #include "get_next_list.h"
 
+static char		*arr_to_str(char **res)
+{
+	int		i;
+	char	*str;
+
+	i = 0;
+	while (res[i])
+	{
+		free (str);
+		str = ft_join(str, res[i]);
+	}
+	return (str);
+}
+
 static int 		ft_check_lst(t_list **begin, const int fd)
 {
 	t_list *first;
@@ -66,7 +80,6 @@ static char		**reading(const int fd)
 	}
 	return (ft_strsplit(cp, '\n'));
 		free(cp);
-	
 }
 
 int				get_next_list(const int fd, char **line)
@@ -79,8 +92,11 @@ int				get_next_list(const int fd, char **line)
 		return (-1);
 	res = NULL;
 	if (!ft_check_lst(&begin, fd))
+	{
 		if ((res = reading(fd)) == NULL)
 			return (-1);
+		begin->content	= arr_to_str(res);
+	}
 	if ((cp = move_arr(res, 0)))
 	{
 		*line = ft_strdup(cp);
