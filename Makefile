@@ -6,12 +6,12 @@
 #    By: azaporoz <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/03 10:39:40 by azaporoz          #+#    #+#              #
-#    Updated: 2018/05/03 10:40:44 by azaporoz         ###   ########.fr        #
+#    Updated: 2018/05/03 17:50:59 by azaporoz         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
 all:
 	gcc -Wall -Wextra -Werror main.c get_next_line.c libft/libft.a
 
-ckean:
+clean:
 	rm *~

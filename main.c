@@ -29,6 +29,7 @@ int main(int ac, char **av)
 		ft_putendl(line);
 	}
 	close(fd);
+	return (1);
 }
 
 

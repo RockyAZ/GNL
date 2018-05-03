@@ -12,69 +12,84 @@
 
 #include "get_next_line.h"
 
-//static 
-
-static t_list	*ft_check_lst(t_list **begin, const int fd)
+static int 		ft_check_lst(t_list **begin, const int fd)
 {
-	t_list *cp;
 	t_list *first;
+	t_list *cp;
+
 	cp = *begin;
 	
 	while (cp)
 	{
 		if (cp->content_size == (size_t)fd)
-			return (cp);
+		{
+			*begin = cp;
+			return (1);
+		}
 		cp = cp->next;
 	}
-	first = *begin;
 	cp = ft_lstnew(NULL, 0);
 	cp->content_size = fd;
+	first = *begin;
 	ft_lstadd(&first, cp);
-	return (cp);
-}
-
-static int		ft_check_str(char *str)
-{
-	int		i;
-	char	*pr;
-
-	i = 0;
-	pr = str;
-	while (i < BUFF_SIZE && *pr != '\0')
-	{
-		if (*pr == '\n' || *pr == '\0')
-			return (i);
-		pr++;
-		i++;
-	}
 	return (0);
 }
-//ft_strchr;
+
+static int		ft_del_arr(char **res)
+{
+	int i;
+
+	i = 0;
+	while (!res[i])
+		i++;
+	free(res[i]);
+	res[i] = NULL;
+}
+
+static char		*move_arr(char **res)
+{
+	int i;
+
+	i = 0;
+	while (!res[i])
+		i++;
+	return (res[i]);
+}
+
+static int		size_arr(char **res)
+{
+	int i;
+
+	i = 0;
+	while (res[i])
+		i++;
+	return (i);
+}
+
 int				get_next_line(const int fd, char **line)
 {
-	int				i;
 	int				ret;
-	char			*cp;
 	char			buf[BUFF_SIZE];
+	char 			*cp;
+	char			**res;
 	static t_list	*begin;
 
 	if ((fd < 0 || line == NULL || read(fd, buf, 0) < 0))
 		return (-1);
-	begin = ft_check_lst(&begin, fd);
-	while ((ret = read(fd, buf, BUFF_SIZE - 1)))
+	if (!ft_check_lst(&begin, fd))
 	{
-		buf[ret] = '\0';
-		if (!(i = ft_check_str(buf)))
-			begin->content = ft_strjoin(begin->content, buf);
-		else
+		while ((ret = read(fd, buf, BUFF_SIZE - 1)))
 		{
-			cp = ft_strnew(i);
-			cp = ft_strncpy(cp, buf, i);
-			begin->content = ft_strjoin(begin->content, cp);
-			*line = begin->content;
-			free (cp);
-			return (1);
+			free(cp);
+			buf[ret] = '\0';
+			cp = ft_strjoin(cp, buf);
 		}
+		res = ft_strsplit(cp, '\n');
+		free(cp);
+		begin->content = res;
+		ret = size_arr(res);
+		*line = ft_strdup(move_arr(res));
+		ft_del_arr(res);
 	}
 	return (0);
 }
