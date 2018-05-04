@@ -5,13 +5,13 @@ int main()
 	char *str;
 	char *str1;
 
-    str = ft_strdup("123456");
+    str = ft_strdup("12345");
     str1 = str;
     str1++;
     str1++;
     str1++;
-//    str = ft_strjoin(str, str1);
-    printf("%d\n", str1 - str);
+    str1++;
+    printf("%ld\n", str1 - str);
     return (0);
 }
 

@@ -16,7 +16,9 @@ int main(int ac, char **av)
 {
 	int		fd;
 	char	*line;
+int i;
 
+i = 0;
 	if (ac == 1)
 	{
 		ft_putstr("error input_file\n");
@@ -27,6 +29,7 @@ int main(int ac, char **av)
 	while (get_next_line(fd, &line) == 1)
 	{
 		ft_putendl(line);
+i++;
 	}
 	close(fd);
 	return (1);
