@@ -19,31 +19,30 @@ static int 		ft_check_lst(t_list **begin, const int fd)
 
 	cp = *begin;
 	
-	while (cp)
+	while (*begin)
 	{
-		if (cp->content_size == (size_t)fd)
-		{
-			*begin = cp;
+		if ((*begin)->content_size == (size_t)fd)
 			return (1);
-		}
-		cp = cp->next;
+		*begin = (*begin)->next;
 	}
+	*begin = cp;
 	cp = ft_lstnew(NULL, 0);
-	cp->content_size = (size_t)fd;
 	first = *begin;
 	ft_lstadd(&first, cp);
+	first->content_size = (size_t)fd;
 	*begin = first;
 	return (0);
 }
 
-static int		ft_move_end(char *begin, char **end)
+static char		*ft_move_end(char *end, int bul)
 {
-	while (*begin != '\n' && *begin != '\0')
-		begin++;
-	*end = begin;
-	if (*end == '\0')
-		return (0);
-	return (1);
+	if (bul)
+		while (*end != '\n' && *end != '\0')
+			end++;
+	else
+		while (*end == '\n')
+			end++;
+	return (end);
 }
 
 static char		*reading(const int fd)
@@ -67,7 +66,6 @@ int				get_next_line(const int fd, char **line)
 {
 	char 			*end;
 	static t_list	*begin;
-	int				bul;
 
 	if (line == NULL)
 		return (-1);
@@ -77,10 +75,12 @@ int				get_next_line(const int fd, char **line)
 		if (begin->content == NULL)
 			return (-1);
 	}
-	bul = ft_move_end((char*)begin->content, &end);
+	end = begin->content;
+	if (*end == '\0')
+		return (0);
+	end = ft_move_end(end, 1);
 	*line = ft_strsub(begin->content, 0, end - (char*)begin->content);
-	begin->content = ft_strsub(end + 1, 0, ft_strlen(end));
-	if (bul)
-		return (1);
-	return (0);
+	end = ft_move_end(end, 0);
+	begin->content = ft_strsub(end, 0, ft_strlen(end));
+	return (1);
 }
