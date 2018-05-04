@@ -16,8 +16,10 @@ int main(int ac, char **av)
 {
 	int		fd;
 	int 	fd2;
+	int 	fd3;
 	char	*line;
 	char	*line2;
+	char	*line3;
 	int tr;
 
 	tr = 0;
@@ -30,30 +32,65 @@ int main(int ac, char **av)
 		return (write(1, "1error\n", 7));
 	if ((fd2 = open(av[2], O_RDONLY)) == -1)
 		return (write(1, "2error\n", 7));
+	if ((fd3 = open(av[3], O_RDONLY)) == -1)
+		return (write(1, "2error\n", 7));
 	/*
 	while ((get_next_line(fd, &line) == 1) || (get_next_line(fd2, &line2) == 1))
 	{
 			ft_putendl(line);
 			ft_putendl(line2);
 	}
-	*/
+	*//*
 	get_next_line(fd, &line);
 	ft_putendl(line);
 	get_next_line(fd2, &line2);
 	ft_putendl(line2);
+	get_next_line(fd3, &line3);
+	ft_putendl(line3);
+	write(1 ,"\n", 1);
+	get_next_line(fd, &line);
+	ft_putendl(line);
+	get_next_line(fd2, &line2);
+	ft_putendl(line2);
+	get_next_line(fd3, &line3);
+	ft_putendl(line3);
+	write(1 ,"\n", 1);
+	get_next_line(fd, &line);
+	ft_putendl(line);
+	get_next_line(fd2, &line2);
+	ft_putendl(line2);
+	get_next_line(fd3, &line3);
+	ft_putendl(line3);
 
-	get_next_line(fd, &line);
-	ft_putendl(line);
-	get_next_line(fd2, &line2);
-	ft_putendl(line2);
+	close(fd);
+	close(fd2);
+	close(fd3);
+*/
 
-	get_next_line(fd, &line);
-	ft_putendl(line);
-	get_next_line(fd2, &line2);
-	ft_putendl(line2);
+
+/*--------------------------------------*/
+
+
+
+
+	if ((fd = open(av[1], O_RDONLY)) == -1)
+		return (write(1, "1error\n", 7));
+	if ((fd2 = open(av[2], O_RDONLY)) == -1)
+		return (write(1, "2error\n", 7));
+	if ((fd3 = open(av[3], O_RDONLY)) == -1)
+		return (write(1, "2error\n", 7));
+
+	while ((get_next_line(fd, &line) == 1) && (get_next_line(fd2, &line2) == 1) && (get_next_line(fd3, &line3) == 1))
+	{
+			ft_putendl(line);
+			ft_putendl(line2);
+			ft_putendl(line3);
+	}
 
 
 	close(fd);
 	close(fd2);
+	close(fd3);
+	
 	return (1);
 }

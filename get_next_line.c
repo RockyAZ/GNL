@@ -19,13 +19,15 @@ static int 		ft_check_lst(t_list **begin, const int fd)
 
 	cp = *begin;
 	
-	while (*begin)
+	while (cp)
 	{
-		if ((*begin)->content_size == (size_t)fd)
+		if (cp->content_size == (size_t)fd)
+		{
+			*begin = cp;
 			return (1);
-		*begin = (*begin)->next;
+		}
+		cp = cp->next;
 	}
-	*begin = cp;
 	cp = ft_lstnew(NULL, 0);
 	first = *begin;
 	ft_lstadd(&first, cp);
@@ -66,21 +68,23 @@ int				get_next_line(const int fd, char **line)
 {
 	char 			*end;
 	static t_list	*begin;
+	t_list			*cp;
 
 	if (line == NULL)
 		return (-1);
-	if (!ft_check_lst(&begin, fd))
-	{
+	cp = begin;
+	if (!ft_check_lst(&cp, fd))
+	{	begin = cp;
 		begin->content = (void*)reading(fd);
 		if (begin->content == NULL)
 			return (-1);
 	}
-	end = begin->content;
+	end = cp->content;
 	if (*end == '\0')
 		return (0);
 	end = ft_move_end(end, 1);
-	*line = ft_strsub(begin->content, 0, end - (char*)begin->content);
+	*line = ft_strsub(cp->content, 0, end - (char*)cp->content);
 	end = ft_move_end(end, 0);
-	begin->content = ft_strsub(end, 0, ft_strlen(end));
+	cp->content = ft_strsub(end, 0, ft_strlen(end));
 	return (1);
 }
