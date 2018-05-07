@@ -4,14 +4,18 @@ int main()
 {
 	char *str;
 	char *str1;
-
-    str = ft_strdup("12345");
+char *res;
+    str = ft_strdup("123456");
     str1 = str;
     str1++;
     str1++;
     str1++;
-    str1++;
-    printf("%ld\n", str1 - str);
+//    printf("%ld\n", str1 - str);
+res = ft_strdup(str1);
+printf("%s\n", res);
+res = ft_strdup("\0");
+printf("%s\n", res);
+printf ("%d\n", *res);
     return (0);
 }
 
