@@ -5,72 +5,118 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: azaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/04/25 16:05:31 by azaporoz          #+#    #+#             */
-/*   Updated: 2018/04/26 19:25:19 by azaporoz         ###   ########.fr       */
+/*   Created: 2018/05/09 20:15:12 by azaporoz          #+#    #+#             */
+/*   Updated: 2018/05/09 20:15:13 by azaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int		ft_check_str(char *str)
+void	ft_refresh(char **res, size_t i)
 {
-	int i;
+	char *old_res;
 
-	i = 0;
-	while (str[i] != '\n' && str[i] != '\0')
-		i++;
-	if (str[i] == '\0')
-		return (0);
-	return (i);
-}
-
-static	void	ft_check_lst(t_list **begin, const int fd)
-{
-	t_list *cp;
-
-	cp = *begin;
-	while (cp)
+	old_res = *res;
+	if ((*res)[i + 1])
 	{
-		if (cp->content_size == (size_t)fd)
-			*begin = cp;
-		cp = cp->next;
+		*res = ft_strsub(*res, i + 1, ft_strlen(*res));
+		ft_strdel(&old_res);
 	}
-	cp = ft_lstnew(NULL, 0);
-	cp->content_size = (size_t)fd;
-	cp->content = (int*)malloc(sizeof(int));
-	*begin = cp;
+	else
+		ft_strdel(res);
 }
 
-int				get_next_line(const int fd, char **line)
+void	ft_solver(int is_join, char **line, char **res, size_t i)
 {
-	char			*cp;
-	static t_list	*begin;
-	char			buf[BUFF_SIZE];
-	int				ret;
-	int				i;
+	char *old_line;
+	char *eol;
 
-	if (line == NULL || fd < 0 || read(fd, buf, 0) < 0 || BUFF_SIZE <= 0)
-		return (-1);
+	if (is_join)
 	{
-		ft_check_lst(&begin, fd);
-		i = (int)begin->content;
-		while ((ret = read(fd, buf, BUFF_SIZE)))
+		old_line = *line;
+		eol = ft_strsub(*res, 0, i);
+		*line = ft_strjoin(*line, eol);
+		ft_strdel(&old_line);
+		ft_strdel(&eol);
+	}
+	else
+		*line = ft_strdup("");
+	ft_refresh(res, i);
+}
+
+int		check_res(t_line *get, char **res, char **line)
+{
+	size_t	i;
+	char	*tmp;
+
+	i = -1;
+	get->err = 1;
+	while (*res && ++i < ft_strlen(*res))
+	{
+		if ((*res)[i] == '\n')
 		{
-			buf[ret] = '\0';
-			if (ft_strchr(buf, '\n') && i == 0)
-			{
-				cp = ft_strsub(buf, 0, ft_check_str(buf));
-				cp = ft_strjoin(*line, cp);
-				i--;
-			}
+			if (i == 0 && *line && ft_strlen(*line) == 0)
+				ft_solver(0, line, res, i);
 			else
-			{
-				cp = ft_strjoin(*line, buf);
-				begin->content++;
-			}
-			free(*line);
-			*line = cp;
+				ft_solver(1, line, res, i);
+			return (1);
 		}
 	}
+	tmp = *line;
+	*line = ft_strjoin(*line, *res);
+	if (*line == NULL)
+		*line = ft_strdup(*res);
+	ft_strdel(&tmp);
+	ft_strdel(res);
+	return (0);
+}
+
+void	ft_read(t_line *get, char **res, char **line)
+{
+	char *buf;
+
+	buf = ft_strnew(BUFF_SIZE);
+	if (buf == NULL)
+	{
+		get->err = -1;
+		return ;
+	}
+	while ((get->err = read(get->fd, buf, BUFF_SIZE)))
+	{
+		buf[get->err] = '\0';
+		*res = ft_strjoin(*res, buf);
+		if (*res == NULL)
+			*res = ft_strdup(buf);
+		if ((get->err < 0) || check_res(get, res, line))
+			break ;
+	}
+	ft_strdel(&buf);
+}
+
+int		get_next_line(int const fd, char **line)
+{
+	t_line		*get;
+	static char	**res = NULL;
+
+	if (fd < 0 || fd >= 1000 || BUFF_SIZE <= 0 || !line)
+		return (-1);
+	if (!(get = (t_line*)malloc(sizeof(t_line))))
+		return (-1);
+	get->fd = fd;
+	if (res == NULL)
+		if (!(res = (char **)malloc(sizeof(char *) * 1000)))
+			return (-1);
+	*line = ft_strnew(0);
+	if (res[fd] == NULL || !check_res(get, &res[fd], line))
+		ft_read(get, &res[fd], line);
+	if (get->err == -1)
+		return (-1);
+	if (get->err == 0 && res[fd] == NULL && *line && ft_strlen(*line) == 0)
+	{
+		ft_strdel(line);
+		ft_memdel((void *)&get);
+		return (0);
+	}
+	ft_memdel((void *)&get);
 	return (1);
 }

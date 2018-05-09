@@ -6,7 +6,7 @@
 /*   By: azaporoz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/22 14:08:07 by azaporoz          #+#    #+#             */
-/*   Updated: 2018/05/04 20:00:26 by azaporoz         ###   ########.fr       */
+/*   Updated: 2018/05/09 17:34:13 by azaporoz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ int		main(int argc, char **argv)
 		while ((ret = read(fd, buf, BUFF_SIZE)))
 		{
 			buf[ret] = '\0';
-			free(str);
 			str = ft_strjoin(str, buf);
         }
 		printf("%s", str);
+		printf("%d\n", ret);
 		close(fd);
 	}
 	return (0);

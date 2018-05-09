@@ -15,13 +15,13 @@
 int main(int ac, char **av)
 {
 	int		fd;
-	int 	fd1;
-	int 	fd2;
-	int 	fd3;
+//	int 	fd1;
+//	int 	fd2;
+//	int 	fd3;
 	char	*line;
-	char	*line1;
-	char	*line2;
-	char	*line3;
+//	char	*line1;
+//	char	*line2;
+//	char	*line3;
 	int tr;
 
 	tr = 0;
@@ -32,25 +32,25 @@ int main(int ac, char **av)
 	}
 	if ((fd = open(av[1], O_RDONLY)) == -1)
 		return (write(1, "0error\n", 7));
-int dif = read(fd, NULL, 10);
-printf("DD:%d", dif);
+
 /*	if ((fd1 = open(av[2], O_RDONLY)) == -1)
 		return (write(1, "1error\n", 7));
 	if ((fd2 = open(av[3], O_RDONLY)) == -1)
 		return (write(1, "2error\n", 7));
 	if ((fd3 = open(av[4], O_RDONLY)) == -1)
 		return (write(1, "3error\n", 7));
-
 */
 
+//write(1, "a\n", 2);
 	while ((tr = get_next_line(fd, &line)) == 1)
 	{
+//write(1, "b\n", 2);
 //			printf("TR-%d\n", tr);
 
 			ft_putendl(line);
 //			printf("%d\n", *line);
 	}
-//	printf("TR-%d\n", tr);
+//	printf("TR:%d\n", tr);
 	close(fd);
 
 
