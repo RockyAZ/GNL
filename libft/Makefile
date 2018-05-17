@@ -6,7 +6,7 @@
 #    By: azaporoz <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/27 18:52:16 by azaporoz          #+#    #+#              #
-#    Updated: 2018/04/04 17:54:59 by azaporoz         ###   ########.fr        #
+#    Updated: 2018/05/10 11:45:04 by azaporoz         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -76,7 +76,7 @@ SOURCE = ft_atoi.c \
 			ft_demcalc.c \
 			ft_strrev.c \
 
-HEADER = libft.h
+HEADER = ./includes/libft.h
 OBJECTS = $(SOURCE:.c=.o)
 NAME = libft.a
 RM = rm -f
@@ -84,13 +84,13 @@ RM = rm -f
 all: $(NAME)
 
 $(NAME):
-	$(CC) -c $(SOURCE) -I $(HEADER)
-	ar rc $(NAME) $(OBJECTS)
+	@$(CC) -c $(SOURCE) -I $(HEADER)
+	@ar rc $(NAME) $(OBJECTS)
 
 clean:
-	$(RM) $(OBJECTS)
+	@$(RM) $(OBJECTS)
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
 
 re: fclean all

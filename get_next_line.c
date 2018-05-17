@@ -75,10 +75,9 @@ static int		check_res(t_line *getl, char **res, char **line)
 
 static void		ft_read(t_line *getl, char **res, char **line)
 {
-	char *buf;
+	char buf[BUFF_SIZE + 1];
 
-	buf = ft_strnew(BUFF_SIZE);
-	if (buf == NULL || read(getl->fd, buf, 0))
+	if (read(getl->fd, buf, 0))
 	{
 		getl->err = -1;
 		return ;
@@ -90,27 +89,27 @@ static void		ft_read(t_line *getl, char **res, char **line)
 		if (check_res(getl, res, line))
 			break ;
 	}
-	ft_strdel(&buf);
 }
 
 int				get_next_line(const int fd, char **line)
 {
 	t_line		*getl;
-	static char	**res;
+	static char	*res[SIZE];
 
 	if (fd < 0 || (unsigned long)fd > SIZE || BUFF_SIZE <= 0 || !line)
 		return (-1);
 	if (!(getl = (t_line*)malloc(sizeof(t_line))))
 		return (-1);
-	if (res == NULL)
-		if (!(res = (char**)malloc(sizeof(char*) * SIZE)))
-			return (-1);
 	getl->fd = fd;
 	*line = ft_strnew(0);
 	if (res[fd] == NULL || !check_res(getl, &res[fd], line))
 		ft_read(getl, &res[fd], line);
 	if (getl->err == -1)
+	{
+		ft_strdel(line);
+		ft_memdel((void*)&getl);
 		return (-1);
+	}
 	if (getl->err == 0 && res[fd] == NULL && *line && ft_strlen(*line) == 0)
 	{
 		ft_strdel(line);
