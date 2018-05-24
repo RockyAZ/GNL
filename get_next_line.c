@@ -113,9 +113,9 @@ int				get_next_line(const int fd, char **line)
 	if (getl->err == 0 && res[fd] == NULL && *line && ft_strlen(*line) == 0)
 	{
 		ft_strdel(line);
-		ft_memdel((void *)&getl);
+		ft_memdel((void*)&getl);
 		return (0);
 	}
-	ft_memdel((void *)&getl);
+	ft_memdel((void*)&getl);
 	return (1);
 }
